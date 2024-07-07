@@ -42,7 +42,7 @@ const authApi = baseApi.enhanceEndpoints({ addTagTypes: [...Object.values(tags)]
         body: arg,
         method: 'POST'
       }),
-      invalidatesTags: (result, error) => (error ? [] : [tags.getAuthedUser])
+      invalidatesTags: (_, error) => (error ? [] : [tags.getAuthedUser])
     })
   })
 });

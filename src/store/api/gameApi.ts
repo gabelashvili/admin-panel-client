@@ -13,7 +13,7 @@ const gameApi = baseApi.enhanceEndpoints({ addTagTypes: [...Object.values(tags)]
         method: 'POST',
         body: arg
       }),
-      invalidatesTags: (result, error) => (error ? [] : [tags.getGames])
+      invalidatesTags: (_, error) => (error ? [] : [tags.getGames])
     }),
     updateGame: build.mutation<ResponseModel<null>, { formData: FormData; gameId: string }>({
       query: (arg) => ({
@@ -21,7 +21,7 @@ const gameApi = baseApi.enhanceEndpoints({ addTagTypes: [...Object.values(tags)]
         method: 'POST',
         body: arg.formData
       }),
-      invalidatesTags: (result, error) => (error ? [] : [tags.getGames])
+      invalidatesTags: (_, error) => (error ? [] : [tags.getGames])
     }),
     getGames: build.query<ResponseModel<GameModel[]>, void>({
       query: (arg) => ({

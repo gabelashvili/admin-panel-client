@@ -27,7 +27,7 @@ const playerApi = baseApi.enhanceEndpoints({ addTagTypes: [...Object.values(tags
         body: arg,
         method: 'PUT'
       }),
-      invalidatesTags: (result, error) => (error ? [] : [tags.getPlayers, tags.getPlayer])
+      invalidatesTags: (_, error) => (error ? [] : [tags.getPlayers, tags.getPlayer])
     })
   })
 });
