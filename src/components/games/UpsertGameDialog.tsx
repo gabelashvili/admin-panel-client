@@ -40,7 +40,7 @@ const UpsertGameDialog = ({ open, toggle, editItem }: { open: boolean; toggle: (
   const [image, setImage] = useState<File | null>(null);
   const [name, setName] = useState('');
 
-  const handleChange = (event: SyntheticEvent, newValue: string) => {
+  const handleChange = (_: SyntheticEvent, newValue: string) => {
     setImage(null);
     setValue(newValue);
   };
