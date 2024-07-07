@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import authApi, { selectAuthedUser } from '../store/api/userApi';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../store/store';
 
 const useAuthCheck = () => {
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
   const authedUser = useAppSelector(selectAuthedUser);
   const [pingUser] = authApi.usePingUserMutation();
   const [getAuthedUser] = authApi.useLazyAuthedUserQuery();
@@ -27,16 +24,6 @@ const useAuthCheck = () => {
       setLoading(false);
     }
   }, [getAuthedUser, pingUser]);
-
-  useEffect(() => {
-    if (!loading && !authedUser) {
-      navigate('/auth');
-    } else {
-      if (pathname.includes('auth')) {
-        navigate('/');
-      }
-    }
-  }, [authedUser, loading, navigate, pathname]);
 
   useEffect(() => {
     checkAuth();

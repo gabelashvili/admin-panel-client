@@ -5,6 +5,8 @@ import { Box, CircularProgress } from '@mui/material';
 import SignUp from './components/SignUp';
 import useAuthCheck from './hooks/useAuthCheck';
 import Layout from './components/Layout';
+import paths from './utils/paths';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   const { loading, isAuthed } = useAuthCheck();
@@ -18,26 +20,18 @@ function App() {
       )}
       {!loading && !isAuthed && (
         <Routes>
-          <Route path="/auth" element={<AuthLayout />}>
+          <Route path={paths.auth.signIn} element={<AuthLayout />}>
             <Route index element={<SignIn />} />
-            <Route path="sign-up" element={<SignUp />} />
-            <Route path="*" element={<p>Not Found</p>} />
+            <Route path={paths.auth.signUp} element={<SignUp />} />
           </Route>
+          <Route path="*" element={<Navigate to={paths.auth.signIn} />} />
         </Routes>
       )}
       {!loading && isAuthed && (
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route
-              index
-              element={
-                <div>
-                  {new Array(200).fill(300).map((el) => (
-                    <div>qwqwd</div>
-                  ))}
-                </div>
-              }
-            />
+          <Route path={paths.home} element={<Layout />}>
+            <Route index element={<div>test</div>} />
+            <Route path={paths.user.profile} element={<UserProfile />} />
             <Route path="*" element={<Navigate to={'/'} />} />
           </Route>
         </Routes>

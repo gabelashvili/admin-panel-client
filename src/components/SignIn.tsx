@@ -11,6 +11,7 @@ import authApi from '../store/api/userApi';
 import { ResponseErrorModel } from '../types/common-types';
 import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
+import paths from '../utils/paths';
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ export default function SignIn() {
               color: 'text.secondary'
             }
           }}>
-          <Link to="/auth/sign-up">{'Don`t have an account? Sign Up'}</Link>
+          <Link to={paths.auth.signUp}>{'Don`t have an account? Sign Up'}</Link>
         </Box>
       </Box>
     </>

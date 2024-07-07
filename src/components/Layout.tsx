@@ -69,7 +69,7 @@ const DrawerAppBar = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <CssBaseline />
       <AppBar component="nav">
         <Toolbar>
