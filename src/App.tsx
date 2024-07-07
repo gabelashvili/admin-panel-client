@@ -7,6 +7,7 @@ import useAuthCheck from './hooks/useAuthCheck';
 import Layout from './components/Layout';
 import paths from './utils/paths';
 import UserProfile from './pages/UserProfile';
+import Games from './pages/Games';
 
 function App() {
   const { loading, isAuthed } = useAuthCheck();
@@ -32,6 +33,7 @@ function App() {
           <Route path={paths.home} element={<Layout />}>
             <Route index element={<div>test</div>} />
             <Route path={paths.user.profile} element={<UserProfile />} />
+            <Route path={paths.games} element={<Games />} />
             <Route path="*" element={<Navigate to={'/'} />} />
           </Route>
         </Routes>
