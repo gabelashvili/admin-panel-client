@@ -52,7 +52,6 @@ const Games = () => {
               Data not found...
             </Typography>
           )}
-          {isFetching && <CircularProgress sx={{ m: 'auto', my: 10 }} />}
           {data?.data.map((el) => (
             <Card elevation={5} key={el._id} sx={{ maxWidth: data.data.length === 1 ? '350px' : 'auto' }}>
               <CardHeader
@@ -91,6 +90,7 @@ const Games = () => {
               <CardMedia component="img" height="194" image={generateImageUrl(el.image)} alt="Paella dish" />
             </Card>
           ))}
+          {isFetching && <CircularProgress sx={{ m: 'auto', my: 10 }} />}
         </Box>
       </Section>
     </>
