@@ -1,16 +1,147 @@
+import CssBaseline from '@mui/material/CssBaseline';
+import MenuIcon from '@mui/icons-material/Menu';
+import {
+  Typography,
+  Button,
+  Toolbar,
+  AppBar,
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Popover,
+  Avatar
+} from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import AppBar from './AppBar';
-import { Box, Container } from '@mui/material';
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import authApi, { selectAuthedUser } from '../store/api/userApi';
 
-const Layout = () => {
+const drawerWidth = 240;
+const navItems = ['Home', 'Players', 'Games'];
+
+const DrawerAppBar = () => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectAuthedUser);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  };
+
+  const logOut = () => {
+    dispatch(authApi.util.resetApiState());
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+  };
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        Admin Panel
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item} disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemText primary={item} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+        <Divider sx={{ my: 1 }} />
+        <Typography
+          sx={{ fontSize: 14, px: 2, py: 1, fontWeight: 500, textAlign: 'center' }}>{`${user?.firstName} ${user?.lastName}`}</Typography>
+        <Divider sx={{ my: 1 }} />
+        <ListItemButton sx={{ py: 0, textAlign: 'center' }}>
+          <ListItemText>My Account</ListItemText>
+        </ListItemButton>
+        <ListItemButton onClick={logOut} sx={{ py: 0, textAlign: 'center', color: 'red' }}>
+          <ListItemText>Logout</ListItemText>
+        </ListItemButton>
+      </List>
+    </Box>
+  );
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <AppBar />
-      <Container maxWidth="xl" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar component="nav">
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}>
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+            Admin Panel
+          </Typography>
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            {navItems.map((item) => (
+              <Button key={item} sx={{ color: '#fff' }}>
+                {item}
+              </Button>
+            ))}
+            <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} sx={{ ml: 4 }}>
+              <Avatar sx={{ width: 32, height: 32 }} />
+            </IconButton>
+            <Popover
+              open={!!anchorEl}
+              anchorEl={anchorEl}
+              slotProps={{ paper: { sx: { py: 1, width: 240 } } }}
+              onClose={() => setAnchorEl(null)}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left'
+              }}>
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  px: 2,
+                  py: 1,
+                  fontWeight: 500,
+                  textAlign: 'center'
+                }}>{`${user?.firstName} ${user?.lastName}`}</Typography>
+              <Divider sx={{ my: 1 }} />
+              <ListItemButton sx={{ py: 0 }}>
+                <ListItemText>My Account</ListItemText>
+              </ListItemButton>
+              <ListItemButton onClick={logOut} sx={{ py: 0, color: 'red' }}>
+                <ListItemText>Logout</ListItemText>
+              </ListItemButton>
+            </Popover>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <nav>
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
+          }}>
+          {drawer}
+        </Drawer>
+      </nav>
+      <Box component="main" sx={{ p: 3, bgcolor: '#eef5f9', width: '100%' }}>
+        <Toolbar />
         <Outlet />
-      </Container>
+      </Box>
     </Box>
   );
 };
 
-export default Layout;
+export default DrawerAppBar;

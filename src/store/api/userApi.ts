@@ -26,7 +26,7 @@ const authApi = baseApi.injectEndpoints({
         body: arg
       })
     }),
-    authedUser: build.query<ResponseModel<UserModel>, void>({
+    authedUser: build.query<ResponseModel<{ user: UserModel }>, void>({
       query: (arg) => ({
         url: 'users/me',
         body: arg

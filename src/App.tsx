@@ -28,7 +28,16 @@ function App() {
       {!loading && isAuthed && (
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<div>qwdq</div>} />
+            <Route
+              index
+              element={
+                <div>
+                  {new Array(200).fill(300).map((el) => (
+                    <div>qwqwd</div>
+                  ))}
+                </div>
+              }
+            />
             <Route path="*" element={<Navigate to={'/'} />} />
           </Route>
         </Routes>
