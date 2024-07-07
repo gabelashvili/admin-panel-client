@@ -1,9 +1,11 @@
 import { z } from 'zod';
-import { signInSchema, signUpSchema } from '../validations/user-validations';
+import { signInSchema, signUpSchema, updateDetailSchema } from '../validations/user-validations';
 
 export type SignUpModel = z.infer<typeof signUpSchema>;
 
 export type SignInModel = z.infer<typeof signInSchema>;
+
+export type UpdateDetailModel = z.infer<typeof updateDetailSchema>;
 
 export type UserModel = {
   avatar: string | null;

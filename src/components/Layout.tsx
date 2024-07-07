@@ -16,16 +16,18 @@ import {
   Popover,
   Avatar
 } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import authApi, { selectAuthedUser } from '../store/api/userApi';
+import paths from '../utils/paths';
 
 const drawerWidth = 240;
 const navItems = ['Home', 'Players', 'Games'];
 
 const DrawerAppBar = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const user = useAppSelector(selectAuthedUser);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -58,7 +60,7 @@ const DrawerAppBar = () => {
         <Typography
           sx={{ fontSize: 14, px: 2, py: 1, fontWeight: 500, textAlign: 'center' }}>{`${user?.firstName} ${user?.lastName}`}</Typography>
         <Divider sx={{ my: 1 }} />
-        <ListItemButton sx={{ py: 0, textAlign: 'center' }}>
+        <ListItemButton onClick={() => navigate(paths.user.profile)} sx={{ py: 0, textAlign: 'center' }}>
           <ListItemText>My Account</ListItemText>
         </ListItemButton>
         <ListItemButton onClick={logOut} sx={{ py: 0, textAlign: 'center', color: 'red' }}>
@@ -111,7 +113,12 @@ const DrawerAppBar = () => {
                   textAlign: 'center'
                 }}>{`${user?.firstName} ${user?.lastName}`}</Typography>
               <Divider sx={{ my: 1 }} />
-              <ListItemButton sx={{ py: 0 }}>
+              <ListItemButton
+                onClick={() => {
+                  navigate(paths.user.profile);
+                  setAnchorEl(null);
+                }}
+                sx={{ py: 0 }}>
                 <ListItemText>My Account</ListItemText>
               </ListItemButton>
               <ListItemButton onClick={logOut} sx={{ py: 0, color: 'red' }}>
