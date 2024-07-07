@@ -30,11 +30,12 @@ function App() {
       )}
       {!loading && isAuthed && (
         <Routes>
-          <Route path={paths.home} element={<Layout />}>
+          <Route path={'/'} element={<Layout />}>
             <Route index element={<div>test</div>} />
             <Route path={paths.user.profile} element={<UserProfile />} />
             <Route path={paths.games} element={<Games />} />
-            <Route path="*" element={<Navigate to={'/'} />} />
+            <Route path={paths.players} element={<div>plaers</div>} />
+            <Route path="*" element={<Navigate to={'/players'} />} />
           </Route>
         </Routes>
       )}

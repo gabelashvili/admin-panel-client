@@ -24,7 +24,6 @@ import paths from '../utils/paths';
 
 const drawerWidth = 240;
 const navItems = [
-  { label: 'Home', path: paths.home },
   { label: 'Players', path: paths.players },
   { label: 'Games', path: paths.games }
 ];
@@ -41,7 +40,7 @@ const DrawerAppBar = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
-  const isSelected = (path: string) => pathname.includes(path);
+  const isSelected = (path: string) => pathname === path;
 
   const logOut = () => {
     dispatch(authApi.util.resetApiState());
