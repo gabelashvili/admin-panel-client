@@ -85,6 +85,7 @@ const UpdateDetails = () => {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
             <TextField
               type={showPassword.newPassword ? 'text' : 'password'}
+              autoComplete='new-password'
               fullWidth
               placeholder="New Password"
               {...register('newPassword', {
