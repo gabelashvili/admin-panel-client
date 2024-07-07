@@ -19,8 +19,10 @@ import { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { PlayersFilters, SortBy, SortDir } from '../types/player-types';
 import { LoadingButton } from '@mui/lab';
+import { useNavigate } from 'react-router-dom';
 
 const Players = () => {
+  const navigate = useNavigate();
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [filters, setFilters] = useState<PlayersFilters>({
@@ -138,7 +140,11 @@ const Players = () => {
                   </TableRow>
                 )}
                 {data?.data.players.map((el) => (
-                  <TableRow hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={el._id}>
+                  <TableRow
+                    hover
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }}
+                    key={el._id}
+                    onClick={() => navigate(`/players/${el._id}`)}>
                     <TableCell component="th" scope="row">
                       {el._id}
                     </TableCell>
@@ -147,7 +153,13 @@ const Players = () => {
                     <TableCell align="center">{moment(el.lastVisitDate).format('DD/MM/YYYY')}</TableCell>
                     <TableCell align="center">{el.level}</TableCell>
                     <TableCell align="center">
-                      <LoadingButton disabled={el.blocked} loading={blockPlayerId === el._id} onClick={() => handleBlock(el._id)}>
+                      <LoadingButton
+                        disabled={el.blocked}
+                        loading={blockPlayerId === el._id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleBlock(el._id);
+                        }}>
                         {el.blocked ? 'Banned' : 'Ban'}
                       </LoadingButton>
                     </TableCell>

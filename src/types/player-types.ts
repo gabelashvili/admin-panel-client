@@ -1,8 +1,8 @@
 export type PlayerModel = {
   _id: string;
   userName: string;
-  totalBet: string;
-  totalWin: string;
+  totalBetAmount: string;
+  totalWinAmount: string;
   level: string;
   lastVisitDate: Date;
   createdAt: Date;

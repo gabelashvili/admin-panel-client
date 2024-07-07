@@ -6,7 +6,7 @@ const Section = ({ children, header, sx }: { children: ReactNode; header?: React
     <Paper sx={{ boxShadow: '0 .5rem 1rem rgba(0,0,0,.05)', ...sx }}>
       <Box>{header}</Box>
       {header && <Divider sx={{ my: 2 }} />}
-      <Box>{children}</Box>
+      <Box sx={{ width: '100%' }}>{children}</Box>
     </Paper>
   );
 };
