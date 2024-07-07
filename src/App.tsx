@@ -9,6 +9,7 @@ import paths from './utils/paths';
 import UserProfile from './pages/UserProfile';
 import Games from './pages/Games';
 import Players from './pages/Players';
+import PlayerInfo from './pages/PlayerInfo';
 
 function App() {
   const { loading, isAuthed } = useAuthCheck();
@@ -36,6 +37,7 @@ function App() {
             <Route path={paths.user.profile} element={<UserProfile />} />
             <Route path={paths.games} element={<Games />} />
             <Route path={paths.players} element={<Players />} />
+            <Route path={`${paths.players}/:playerId`} element={<PlayerInfo />} />
             <Route path="*" element={<Navigate to={'/players'} />} />
           </Route>
         </Routes>

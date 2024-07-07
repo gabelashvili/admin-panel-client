@@ -3,7 +3,8 @@ import type { ResponseModel } from '../../types/common-types';
 import { PlayerModel, PlayersFilters } from '../../types/player-types';
 
 const tags = {
-  getPlayers: 'players/getPlayer'
+  getPlayers: 'players/getPlayers',
+  getPlayer: 'players/getPlayer'
 };
 const playerApi = baseApi.enhanceEndpoints({ addTagTypes: [...Object.values(tags)] }).injectEndpoints({
   endpoints: (build) => ({
@@ -13,6 +14,20 @@ const playerApi = baseApi.enhanceEndpoints({ addTagTypes: [...Object.values(tags
         params: { ...arg }
       }),
       providesTags: [tags.getPlayers]
+    }),
+    getPlayer: build.query<ResponseModel<PlayerModel>, string>({
+      query: (arg) => ({
+        url: `players/${arg}`
+      }),
+      providesTags: [tags.getPlayer]
+    }),
+    blockPlayer: build.mutation<ResponseModel<null>, string>({
+      query: (arg) => ({
+        url: `players/block/${arg}`,
+        body: arg,
+        method: 'PUT'
+      }),
+      invalidatesTags: (result, error) => (error ? [] : [tags.getPlayers, tags.getPlayer])
     })
   })
 });

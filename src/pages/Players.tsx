@@ -18,6 +18,7 @@ import { ArrowDownward, ArrowUpward, VerifiedUser } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { PlayersFilters, SortBy, SortDir } from '../types/player-types';
+import { LoadingButton } from '@mui/lab';
 
 const Players = () => {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -31,6 +32,19 @@ const Players = () => {
   });
 
   const { data, isFetching } = playerApi.useGetPlayersQuery(filters);
+  const [blockPlayer] = playerApi.useBlockPlayerMutation();
+  const [blockPlayerId, setBlockPlayerId] = useState('');
+
+  const handleBlock = async (playerId: string) => {
+    try {
+      setBlockPlayerId(playerId);
+      await blockPlayer(playerId).unwrap();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setBlockPlayerId('');
+    }
+  };
 
   const handleSearch = (search: string) => {
     timerRef.current && window.clearTimeout(timerRef.current);
@@ -109,6 +123,7 @@ const Players = () => {
                       )}
                     </IconButton>
                   </TableCell>
+                  <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -131,6 +146,11 @@ const Players = () => {
                     <TableCell align="center">{moment(el.createdAt).format('DD/MM/YYYY')}</TableCell>
                     <TableCell align="center">{moment(el.lastVisitDate).format('DD/MM/YYYY')}</TableCell>
                     <TableCell align="center">{el.level}</TableCell>
+                    <TableCell align="center">
+                      <LoadingButton disabled={el.blocked} loading={blockPlayerId === el._id} onClick={() => handleBlock(el._id)}>
+                        {el.blocked ? 'Banned' : 'Ban'}
+                      </LoadingButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
