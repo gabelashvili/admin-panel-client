@@ -7,6 +7,7 @@ export type PlayerModel = {
   lastVisitDate: Date;
   createdAt: Date;
   blocked: boolean;
+  transactions?: TransactionType[];
 };
 
 export type TransactionType = {
@@ -23,7 +24,6 @@ export type PlayersFilters = {
   search: string;
   sortBy: SortBy | null;
   sortDir: SortDir | null;
-  transactions?: TransactionType[];
 };
 
 export type SortBy = 'userName' | 'registrationDate' | 'lastVisitDate' | 'level';
