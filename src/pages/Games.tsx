@@ -47,7 +47,7 @@ const Games = () => {
             gridTemplateColumns: { xs: 'repeat( auto-fit, minmax(250px, 1fr) )', md: 'repeat( auto-fit, minmax(350px, 1fr) )' },
             gap: 3
           }}>
-          {!isFetching && !data && (
+          {!isFetching && !data?.data.length && (
             <Typography sx={{ m: 'auto', fontSize: 22, fontStyle: 'italic', color: 'text.secondary', my: 10 }}>
               Data not found...
             </Typography>

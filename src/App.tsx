@@ -8,6 +8,7 @@ import Layout from './components/Layout';
 import paths from './utils/paths';
 import UserProfile from './pages/UserProfile';
 import Games from './pages/Games';
+import Players from './pages/Players';
 
 function App() {
   const { loading, isAuthed } = useAuthCheck();
@@ -34,7 +35,7 @@ function App() {
             <Route index element={<div>test</div>} />
             <Route path={paths.user.profile} element={<UserProfile />} />
             <Route path={paths.games} element={<Games />} />
-            <Route path={paths.players} element={<div>plaers</div>} />
+            <Route path={paths.players} element={<Players />} />
             <Route path="*" element={<Navigate to={'/players'} />} />
           </Route>
         </Routes>
