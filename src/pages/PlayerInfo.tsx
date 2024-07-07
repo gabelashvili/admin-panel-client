@@ -13,14 +13,52 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import { useEffect } from 'react';
 import moment from 'moment';
+import ReactApexChart from 'react-apexcharts';
 
 const PlayerInfo = () => {
   const { playerId } = useParams();
   const { isError, isFetching, data } = playerApi.useGetPlayerQuery(playerId ?? '');
 
-  useEffect(() => {}, []);
+  const options = {
+    series: [
+      {
+        name: 'Total Bet',
+        data: data?.data.bets?.map((el) => el.amount) ?? []
+      },
+      {
+        name: 'Total Win',
+        data: data?.data.bets?.map((el) => el.win) ?? []
+      }
+    ],
+    options: {
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '55%',
+          endingShape: 'rounded'
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent']
+      },
+      xaxis: {
+        categories: data?.data?.bets ? data?.data?.bets.map((el) => moment(el.createdAt).format('MM/DD/YYYY')) : []
+      },
+      fill: {
+        opacity: 1
+      }
+    }
+  };
   return (
     <Section sx={{ minHeight: 500, display: 'flex' }}>
       {isError && <Navigate to={'/players'} />}
@@ -91,6 +129,8 @@ const PlayerInfo = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Divider sx={{ my: 8 }} />
+          <ReactApexChart options={options.options as any} series={options.series} type="bar" height={350} />
         </>
       )}
     </Section>

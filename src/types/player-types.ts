@@ -8,6 +8,7 @@ export type PlayerModel = {
   createdAt: Date;
   blocked: boolean;
   transactions?: TransactionType[];
+  bets?: BetType[];
 };
 
 export type TransactionType = {
@@ -16,6 +17,13 @@ export type TransactionType = {
   status: 'pending' | 'fulfilled';
   _id: string;
   transactionDate: Date;
+};
+
+export type BetType = {
+  amount: number;
+  win: number;
+  _id: string;
+  createdAt: Date;
 };
 
 export type PlayersFilters = {
