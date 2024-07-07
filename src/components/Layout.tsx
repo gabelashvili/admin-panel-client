@@ -21,6 +21,7 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import authApi, { selectAuthedUser } from '../store/api/userApi';
 import paths from '../utils/paths';
+import { generateImageUrl } from '../utils/utils';
 
 const drawerWidth = 240;
 const navItems = [
@@ -102,7 +103,7 @@ const DrawerAppBar = () => {
               </Button>
             ))}
             <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} sx={{ ml: 4 }}>
-              <Avatar sx={{ width: 32, height: 32 }} />
+              <Avatar src={user?.avatar ? generateImageUrl(user.avatar) : ''} sx={{ width: 32, height: 32 }} />
             </IconButton>
             <Popover
               open={!!anchorEl}
