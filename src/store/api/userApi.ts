@@ -3,7 +3,10 @@ import type { ResponseModel } from '../../types/common-types';
 import type { SignInModel, SignUpModel, TokenModel, UserModel } from '../../types/user-types';
 import { createSelector } from '@reduxjs/toolkit';
 
-const authApi = baseApi.injectEndpoints({
+const tags = {
+  getAuthedUser: 'authApi/getAuthedUser'
+};
+const authApi = baseApi.enhanceEndpoints({ addTagTypes: [...Object.values(tags)] }).injectEndpoints({
   endpoints: (build) => ({
     signUp: build.mutation<ResponseModel<null>, SignUpModel>({
       query: (arg) => ({
@@ -30,7 +33,16 @@ const authApi = baseApi.injectEndpoints({
       query: (arg) => ({
         url: 'users/me',
         body: arg
-      })
+      }),
+      providesTags: [tags.getAuthedUser]
+    }),
+    updateAuthedUser: build.mutation<ResponseModel<{ user: UserModel }>, FormData>({
+      query: (arg) => ({
+        url: 'users/me',
+        body: arg,
+        method: 'POST'
+      }),
+      invalidatesTags: (result, error) => (error ? [] : [tags.getAuthedUser])
     })
   })
 });

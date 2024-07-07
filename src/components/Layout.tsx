@@ -118,10 +118,10 @@ const DrawerAppBar = () => {
                   navigate(paths.user.profile);
                   setAnchorEl(null);
                 }}
-                sx={{ py: 0 }}>
+                sx={{ py: 1 }}>
                 <ListItemText>My Account</ListItemText>
               </ListItemButton>
-              <ListItemButton onClick={logOut} sx={{ py: 0, color: 'red' }}>
+              <ListItemButton onClick={logOut} sx={{ py: 1, color: 'red' }}>
                 <ListItemText>Logout</ListItemText>
               </ListItemButton>
             </Popover>

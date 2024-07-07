@@ -1,15 +1,19 @@
 import { Box, Button, Divider, IconButton, InputAdornment, TextField } from '@mui/material';
 import UploadAvatar from './UploadAvatar';
 import { useAppSelector } from '../../store/store';
-import { selectAuthedUser } from '../../store/api/userApi';
-import { updateDetailSchema } from '../../validations/user-validations';
+import authApi, { selectAuthedUser } from '../../store/api/userApi';
 import { UpdateDetailModel } from '../../types/user-types';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { updateDetailSchema } from '../../validations/user-validations';
+import { toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
+import { generateImageUrl } from '../../utils/utils';
 
 const UpdateDetails = () => {
+  const [updateUser, { isLoading }] = authApi.useUpdateAuthedUserMutation();
   const user = useAppSelector(selectAuthedUser)!;
   const [showPassword, setShowPassword] = useState({
     currentPassword: false,
@@ -42,12 +46,19 @@ const UpdateDetails = () => {
     }
   }, [reset, user]);
 
-  const onSubmit = handleSubmit((data) => {
-    const reqData = Object.keys(data).reduce(
-      (acc, cur) => ({ ...acc, ...(data[cur as keyof typeof data] && { [cur]: data[cur as keyof typeof data] }) }),
-      {}
-    ) as UpdateDetailModel;
-    console.log(reqData, 22);
+  const onSubmit = handleSubmit(async (data) => {
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      if (data[key as keyof typeof data]) {
+        formData.append(key, data[key as keyof typeof data]!);
+      }
+    });
+    try {
+      await updateUser(formData).unwrap();
+      toast.success('Profile updated');
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   useEffect(() => {
@@ -60,7 +71,7 @@ const UpdateDetails = () => {
     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 5 }}>
       <Box sx={{ width: '100%', display: 'flex', gap: 2, flexDirection: { xs: 'column', md: 'row' } }}>
         <UploadAvatar
-          currentAvatar={user.avatar}
+          currentAvatar={user.avatar ? generateImageUrl(user.avatar) : null}
           newAvatar={watch('avatar')}
           onChange={(file) => setValue('avatar', file, { shouldDirty: true })}
         />
@@ -97,6 +108,7 @@ const UpdateDetails = () => {
               type={showPassword.repeatNewPassword ? 'text' : 'password'}
               fullWidth
               placeholder="Repeat New Password"
+              disabled={!watch('newPassword')}
               {...register('repeatNewPassword')}
               InputProps={{
                 endAdornment: (
@@ -114,6 +126,7 @@ const UpdateDetails = () => {
             <TextField
               type={showPassword.currentPassword ? 'text' : 'password'}
               fullWidth
+              disabled={!watch('newPassword')}
               placeholder="Current Password"
               {...register('currentPassword')}
               InputProps={{
@@ -137,9 +150,9 @@ const UpdateDetails = () => {
         <Button variant="contained" sx={{ mr: 2, opacity: isDirty ? 1 : 0 }} onClick={handleReset}>
           Cancel
         </Button>
-        <Button variant="contained" onClick={onSubmit}>
+        <LoadingButton variant="contained" onClick={onSubmit} disabled={!isDirty} loading={isLoading}>
           Save
-        </Button>
+        </LoadingButton>
       </Box>
     </Box>
   );
