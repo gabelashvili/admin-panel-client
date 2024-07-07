@@ -16,17 +16,22 @@ import {
   Popover,
   Avatar
 } from '@mui/material';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import authApi, { selectAuthedUser } from '../store/api/userApi';
 import paths from '../utils/paths';
 
 const drawerWidth = 240;
-const navItems = ['Home', 'Players', 'Games'];
+const navItems = [
+  { label: 'Home', path: paths.home },
+  { label: 'Players', path: paths.players },
+  { label: 'Games', path: paths.games }
+];
 
 const DrawerAppBar = () => {
   const dispatch = useAppDispatch();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const user = useAppSelector(selectAuthedUser);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -35,6 +40,8 @@ const DrawerAppBar = () => {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+
+  const isSelected = (path: string) => pathname.includes(path);
 
   const logOut = () => {
     dispatch(authApi.util.resetApiState());
@@ -50,9 +57,9 @@ const DrawerAppBar = () => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem key={item.path} disablePadding onClick={() => navigate(item.path)}>
             <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
+              <ListItemText primary={item.label} primaryTypographyProps={{ sx: { fontWeight: isSelected(item.path) ? 600 : 400 } }} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -88,8 +95,11 @@ const DrawerAppBar = () => {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
+              <Button
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                sx={{ color: 'white', fontWeight: isSelected(item.path) ? 600 : 400 }}>
+                {item.label}
               </Button>
             ))}
             <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} sx={{ ml: 4 }}>
